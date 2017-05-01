@@ -9,7 +9,7 @@
 TIME:
 <input id="lblTime" type="text"/>
 <br/>
-<canvas id="canvas" height="600" width="1200" style="border: 2px solid black;"></canvas>
+<canvas id="canvas" height="720" width="1400" style="border: 2px solid black;"></canvas>
 
 
 <script type="text/javascript">
@@ -44,9 +44,9 @@ TIME:
         start_time = new Date();
 
         //create the board - pacman and food .
-        for (var i = 0; i < _gameWidth / proportion; i++) {
+        for (var i = 1; i < _gameWidth / proportion; i++) {
             board[i] = [];
-            for (var j = 0; j < _gameHeight / proportion; j++) {
+            for (var j = 1; j < _gameHeight / proportion; j++) {
                 var randomNum = Math.random();
                 if ((i == 1 && j == 1)) {
                     board[i][j] = 5;
@@ -91,19 +91,82 @@ TIME:
     }
 
     function drawPacmanMaze() {
-        var padding = 5;
+        var padding = 22;
         var thickness = 10;
+        //maze frame
+
         context.beginPath();
-        context.moveTo(padding,padding);
-        context.lineTo(_gameWidth-padding,padding);
-        context.lineTo(_gameWidth-padding,_gameHeight*0.35);
-        context.lineTo(_gameWidth-padding-125,_gameHeight*0.35);
-        context.lineTo(_gameWidth-padding-125,_gameHeight*0.45);
-        context.lineTo(_gameWidth-padding,_gameHeight*0.45);
+        //top
+        context.moveTo(20,290);
+
+        context.lineTo(45-padding+300,290);
+        context.lineTo(45-padding+300,220);
+        context.lineTo(45-padding,220);
+        context.lineTo(45-padding,padding);
+
+        context.lineTo(1230-padding,padding);
+        context.lineTo(1230-padding,220);
+        context.lineTo(1230-padding-300,220);
+        context.lineTo(1230-padding-300,290);
+        context.lineTo(1230-padding,290);
+        //button
+        context.moveTo(1230-padding,340);
+        context.lineTo(1230-padding-300,340);
+        context.lineTo(1230-padding-300,410);
+        context.lineTo(1230-padding,410);
+        context.lineTo(1230-padding,630-padding);
+        context.lineTo(1230-padding-585,630-padding);
+        context.lineTo(1230-padding-585,630-padding-242);
+        context.lineTo(1230-padding-600,630-padding-242);
+        context.lineTo(1230-padding-600,630-padding);
+        context.lineTo(45-padding,630-padding);
+
+        context.lineTo(45-padding,630-padding);
+        context.lineTo(45-padding,410);
+        context.lineTo(45-padding+300,410);
+        context.lineTo(45-padding+300,340);
+        context.lineTo(45-padding,340);
+
+        context.lineWidth=thickness;
         context.lineJoin = "bevel";
         context.lineCap = "butt";
         context.strokeStyle = "blue";
         context.stroke()
+
+        //shapes in maze
+        var paddingShapes =15;
+        //squre on the cells
+        context.beginPath();
+        context.strokeStyle="blue";
+        context.lineWidth=10;
+        //corner rec
+        context.strokeRect(70,70,220,100);
+        context.strokeRect(70,460,220,100);
+        context.strokeRect(940,70,220,100);
+        context.strokeRect(940,460,220,100);
+
+        //center
+        context.strokeRect(370,220,490,100);
+
+        //top thin rec
+        context.strokeRect(340,70,550,40);
+        context.strokeRect(340,160,550,10);
+
+        //small bottom
+        context.strokeRect(370,370,190,40);
+        context.strokeRect(670,370,190,40);
+
+        context.strokeRect(340,460,40,100);
+        context.strokeRect(430,460,40,100);
+        context.strokeRect(520,460,40,50);
+        context.strokeRect(520,550,40,10);
+
+        context.strokeRect(670,460,40,50);
+        context.strokeRect(670,550,40,10);
+        context.strokeRect(760,460,40,100);
+        context.strokeRect(850,460,40,100);
+
+
     }
 
     function GetKeyPressed() {
@@ -128,8 +191,8 @@ TIME:
         context.fillStyle = "black";
         context.fillRect(0, 0, canvas.width, canvas.height);
         drawPacmanMaze();
-        for (var i = 0; i < _gameWidth / proportion; i++) {
-            for (var j = 0; j < _gameHeight / proportion; j++) {
+        for (var i = 1; i < _gameWidth / proportion; i++) {
+            for (var j = 1; j < _gameHeight / proportion; j++) {
                 var center = new Object();
                 center.x = i * proportion + 15;
                 center.y = j * proportion + 15;
@@ -203,7 +266,7 @@ TIME:
             m_currDirection = x;
         }
         if (x == 1) {
-            if (pacmanShape.j > 0) {
+            if (pacmanShape.j > 1) {
                 pacmanShape.j--;
             }
         }
@@ -213,7 +276,7 @@ TIME:
             }
         }
         if (x == 2) {
-            if (pacmanShape.i > 0) {
+            if (pacmanShape.i > 1) {
                 pacmanShape.i--;
             }
         }
@@ -222,13 +285,13 @@ TIME:
                 pacmanShape.i++;
             }
         }
-        if (board[pacmanShape.i][pacmanShape.j] == 1) {
+        if (board[pacmanShape.i][pacmanShape.j] === 1) {
             score++;
         }
         board[pacmanShape.i][pacmanShape.j] = 2;
 
 
-        updateMonsterPosition();
+        //updateMonsterPosition();
         var currentTime = new Date();
         time_elapsed = (currentTime - start_time) / 1000;
         if (score >= 20 && time_elapsed <= 10) {
@@ -249,21 +312,21 @@ TIME:
         {
             var monster = _monsters[i];
             board[monster.i][monster.j]=0;
-            if(Math.abs(monster.i-pacmanShape.i)==0)
+            if(Math.abs(monster.i-pacmanShape.i)===0)
             {
                 if (pacmanShape.j < monster.j)
                     monster.j--;
                 else
                     monster.j++;
             }
-            else if(Math.abs(monster.j-pacmanShape.j)==0)
+            if(Math.abs(monster.j-pacmanShape.j)===0)
             {
                 if (pacmanShape.i < monster.i)
                     monster.i--;
                 else
                     monster.i++;
             }
-            else if(Math.abs(monster.i-pacmanShape.i)<Math.abs(monster.j-pacmanShape.j) ) {
+            if(Math.abs(monster.i-pacmanShape.i)<Math.abs(monster.j-pacmanShape.j) ) {
 
                 if (pacmanShape.j < monster.j)
                     monster.j--;
