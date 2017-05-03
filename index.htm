@@ -9,7 +9,7 @@
 TIME:
 <input id="lblTime" type="text"/>
 <br/>
-<canvas id="canvas" height="720" width="1400" style="border: 2px solid black;"></canvas>
+<canvas id="canvas" height="680" width="1400" style="border: 2px solid black;"></canvas>
 
 
 <script type="text/javascript">
@@ -31,7 +31,8 @@ TIME:
     var time_elapsed;
     var interval;
     var m_currDirection = 4;
-    var _foodCounter
+    var _foodCounter;
+    var _beforeMonsterCell = [0,0];
 
     Start();
 
@@ -93,7 +94,7 @@ TIME:
             currBoard[i] = new Array(19);
             for (var j = 0; j < _gameHeight / proportion - 1; j++) {
                 var randomNum = Math.random();
-                if ((i === 1 && j === 1)) {
+                if ((i === 0 && j === 0)) {
                     currBoard[i][j] = 5;
                     oMonster.i = i;
                     oMonster.j = j;
@@ -104,11 +105,11 @@ TIME:
                     bMonster.j = j;
                 }
                 else if (gameBoard[i][j] === 0) {
-                    if (randomNum < 0.15 && pacman_remain === 1) {
+                    if (i===10 && j===5 && pacman_remain === 1) {
+                        currBoard[i][j] = 2;
                         pacmanShape.i = i;
                         pacmanShape.j = j;
                         pacman_remain--;
-                        currBoard[i][j] = 2;
                     }
                     else {
                         _foodCounter++;
@@ -266,7 +267,7 @@ TIME:
 
                 }
                 else if (currBoard[i][j] == 5) {
-                    context.drawImage(oMonster, i * 30, j * 30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
+                    context.drawImage(oMonster, i * 30+30, j * 30+30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
                 }
                 else if (currBoard[i][j] == 6) {
                     context.drawImage(bMonster, i * 30 + 30, j * 30 + 30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
@@ -332,7 +333,7 @@ TIME:
         currBoard[pacmanShape.i][pacmanShape.j] = 2;
 
 
-        //updateMonsterPosition();
+        updateMonsterPosition();
         var currentTime = new Date();
         time_elapsed = (currentTime - start_time) / 1000;
         if (score >= 20 && time_elapsed <= 10) {
@@ -350,67 +351,76 @@ TIME:
     function updateMonsterPosition() {
         for (var i = 0; i < _monsters.length; i++) {
             var monster = _monsters[i];
-            currBoard[monster.i][monster.j] = 0;
-
+            currBoard[monster.i][monster.j] = _beforeMonsterCell[i];
+            var next_monster_i = monster.i;
+            var next_monster_j = monster.j;
             if (Math.abs(monster.i - pacmanShape.i) === 0) {
-                if (pacmanShape.j < monster.j && currBoard[monster.i][monster.j - 1] !== 1)
-
-                    monster.j--;
-                else if (currBoard[monster.i][monster.j + 1] !== 1) {
-                    monster.j++;
+                if (pacmanShape.j < monster.j) {
+                    next_monster_j--;
                 }
-
+                else {
+                    next_monster_j++;
+                }
             }
             else if (Math.abs(monster.j - pacmanShape.j) === 0) {
-                if (pacmanShape.i < monster.i && currBoard[monster.i-1][monster.j] )
-                    monster.i--;
+                if (pacmanShape.i < monster.i)
+                    next_monster_i--;
                 else
-                    monster.i++;
+                    next_monster_i++;
             }
             else if (Math.abs(monster.i - pacmanShape.i) < Math.abs(monster.j - pacmanShape.j)) {
-
-                if (pacmanShape.j < monster.j)
-                    monster.j--;
-                else
-                    monster.j++;
-            }
-            else {
                 if (pacmanShape.i < monster.i)
-                    monster.i--;
+                    next_monster_i--;
                 else
+                    next_monster_i++;
+            }
+            else {
+                if (pacmanShape.j < monster.j)
+                    next_monster_j--;
+                else
+                    next_monster_j++;
+            }
+            if (currBoard[next_monster_i][next_monster_j] === 1) //monster i new cordinate is wall
+            {
+                goDefault(monster);
+                next_monster_i = monster.i;
+                next_monster_j = monster.j;
+            }
+            _beforeMonsterCell[i] = currBoard[next_monster_i][next_monster_j];
+            currBoard[next_monster_i][next_monster_j] = 5 + i;
+            monster.i = next_monster_i;
+            monster.j = next_monster_j;
+
+        }
+    }
+        function goDefault(monster) {
+
+            while(true)
+            {
+                //go right
+                if(monster.i < (_gameWidth / proportion) - 2 && currBoard[monster.i + 1][monster.j] !== 1) {
                     monster.i++;
-            }
-            currBoard[monster.i][monster.j] = 5 + i;
-        }
+                    return;
+                }
+                //go down
+                else if(monster.j < (_gameHeight / proportion) - 2 && currBoard[monster.i][monster.j + 1] !== 1){
+                    monster.j++;
+                    return;
 
-
-    }
-
-    function goDefault(monster, move) {
-        if (move === "Xmove") {
-            if (monster.i == 0) {
-                monster.i++;
-            }
-            else if (monster.i === _gameWidth / proportion - 1)
-                monster.i--;
-            else {
-                monster.i++;
-            }
-        }
-        if (move === "Ymove") {
-            if (monster.j === 0) {
-                monster.j++;
-            }
-            else if (monster.j === _gameWidth / proportion - 1)
-                monster.j--;
-            else {
-                monster.j++;
+                }
+                //go left
+                else if(monster.i > 0 && currBoard[monster.i - 1][monster.j] !== 1){
+                    monster.i--;
+                    return;
+                }
+                //go up
+                else if(monster.j>0 && currBoard[monster.i][monster.j-1]!==1){
+                    monster.j--;
+                    return;
+                }
             }
         }
 
-
-
-    }
 
 </script>
 </body>
