@@ -15,8 +15,10 @@ TIME:
 <script type="text/javascript">
     var oMonster = new Image();
     var bMonster = new Image();
+    var strawberry =new Image();
     oMonster.src = 'images/oMonster.jpg';
     bMonster.src = 'images/bMonster.jpg';
+    strawberry.src= 'images/strawberry.JPG';
     var _monsters = [oMonster, bMonster];
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
@@ -31,8 +33,11 @@ TIME:
     var time_elapsed;
     var interval;
     var m_currDirection = 4;
-    var _foodCounter;
+    var _foodCounter=0;
     var _beforeMonsterCell = [0,0];
+    var randomNum = Math.floor((Math.random() *285 + 1));
+    var _lastPointsPositions = [0,18]
+    var _beforePointsCell=0;
 
     Start();
 
@@ -93,7 +98,7 @@ TIME:
         for (var i = 0; i < _gameWidth / proportion - 1; i++) {
             currBoard[i] = new Array(19);
             for (var j = 0; j < _gameHeight / proportion - 1; j++) {
-                var randomNum = Math.random();
+           //     var randomNum = Math.floor((Math.random() *285 + 1));
                 if ((i === 0 && j === 0)) {
                     currBoard[i][j] = 5;
                     oMonster.i = i;
@@ -104,12 +109,18 @@ TIME:
                     bMonster.i = i;
                     bMonster.j = j;
                 }
+                else if ((i===0 && j===18)){
+                    currBoard[i][j]=4;
+                    strawberry.i=i;
+                    strawberry.j=j;
+                }
                 else if (gameBoard[i][j] === 0) {
-                    if (i===10 && j===5 && pacman_remain === 1) {
+                    if (randomNum-10<=_foodCounter && _foodCounter<=randomNum+10 &&  pacman_remain === 1 && (i!=0 && j!=0 ) &&(i!=38 && j!=18 ) ) {
                         currBoard[i][j] = 2;
                         pacmanShape.i = i;
                         pacmanShape.j = j;
                         pacman_remain--;
+
                     }
                     else {
                         _foodCounter++;
@@ -121,7 +132,7 @@ TIME:
                 }
             }
         }
-        keysDown = {};
+         keysDown = {};
         addEventListener("keydown", function (e) {
             keysDown[e.keyCode] = true;
         }, false);
@@ -272,6 +283,9 @@ TIME:
                 else if (currBoard[i][j] == 6) {
                     context.drawImage(bMonster, i * 30 + 30, j * 30 + 30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
                 }
+                else if (currBoard[i][j]==4){
+                    context.drawImage(strawberry, i * 30 + 30, j * 30 + 30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
+                }
 
 
             }
@@ -334,6 +348,7 @@ TIME:
 
 
         updateMonsterPosition();
+        updatePointsPosition();
         var currentTime = new Date();
         time_elapsed = (currentTime - start_time) / 1000;
         if (score >= 20 && time_elapsed <= 10) {
@@ -421,6 +436,53 @@ TIME:
             }
         }
 
+        function updatePointsPosition() {
+        currBoard[strawberry.i][strawberry.j]=_beforePointsCell;
+
+
+            var right=[strawberry.i+1,strawberry.j ];
+
+            var left=[strawberry.i-1, strawberry.j];
+
+            var up=[strawberry.i, strawberry.j-1];
+
+            var down=[strawberry.i,strawberry.j+1];
+
+            var arrLegalMoves = [];
+
+            // collect to arr all possible moves
+            if ( right[0]<=(_gameWidth / proportion) - 2 && (currBoard[right[0]][right[1]] === 0 ||currBoard[right[0]][right[1]] === 9)
+            && !(_lastPointsPositions[0]===right[0] && _lastPointsPositions[1]===right[1])) {
+                arrLegalMoves.push(right);
+            }
+            if ( left[0]>=0)
+                if (  (currBoard[left[0]][left[1]] === 0 ||currBoard[left[0]][left[1]] === 9)
+                && !(_lastPointsPositions[0]===left[0] && _lastPointsPositions[1]===left[1])) {
+                arrLegalMoves.push(left);
+            }
+            if ( up[1]>=0 && (currBoard[up[0]][up[1]] === 0 ||currBoard[up[0]][up[1]] === 9)
+                && !(_lastPointsPositions[0]===up[0] && _lastPointsPositions[1]===up[1])) {
+                arrLegalMoves.push(up);
+            }
+            if ( down[1]<=(_gameHeight / proportion) - 2 && (currBoard[down[0]][down[1]] === 0 ||currBoard[down[0]][down[1]] === 9)
+                && !(_lastPointsPositions[0]===down[0] && _lastPointsPositions[1]===down[1])) {
+                arrLegalMoves.push(down);
+            }
+            //choose random move from the legals
+            var len = arrLegalMoves.length;
+            var rand = Math.floor((Math.random() *len));
+            _lastPointsPositions[0] = strawberry.i;
+            _lastPointsPositions[1] = strawberry.j;
+             //move the points there
+            strawberry.i=arrLegalMoves[rand][0];
+            strawberry.j=arrLegalMoves[rand][1];
+            //save the last location
+            _beforePointsCell = currBoard[ strawberry.i][ strawberry.j];
+
+            //update the boeard acordingli
+            currBoard[strawberry.i][strawberry.j] = 4;
+
+        }
 
 </script>
 </body>
