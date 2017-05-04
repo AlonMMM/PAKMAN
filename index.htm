@@ -34,12 +34,13 @@ TIME:
     var intervalPacman;
     var intervalMonsters;
     var m_currDirection = 4;
-    var _foodCounter=0;
-    var _beforeMonsterCell = [0,0];
+    var locatePacman=0;
+    var _beforeMonsterCell = [9,9];
     var _monsterLastPosition = [[],[]];
-    var randomNum = Math.floor((Math.random() *285 + 1));
+
     var _lastPointsPositions = [];
-    var _beforePointsCell=0;
+    var _beforePointsCell=9;
+    var ui_totalFood=90;
 
 
 
@@ -48,6 +49,15 @@ TIME:
     var gameBoard = [[]];
 
     function Start() {
+        var foodCounter=0;
+        var points25=Math.floor(ui_totalFood/(10*ui_totalFood/100));
+        var points15= Math.floor(ui_totalFood/(30*ui_totalFood/100));
+        // var _points5= Math.floor(ui_totalFood/(60*ui_totalFood/100));
+        var foodIntervals= Math.floor(288/ui_totalFood);
+        var constRemainder=1.0*(288/ui_totalFood)-foodIntervals;
+        var chngReminder=constRemainder;
+        var blackCell=0;
+        var randomNum = Math.floor((Math.random() *285 + 1));
 
         gameBoard = [
             [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
@@ -96,6 +106,7 @@ TIME:
         /*   var cnt = 800;
          var food_remain = 200;
          */
+        var rand;
         var pacman_remain = 1;
         start_time = new Date();
         //create the board - pacman and food .
@@ -103,6 +114,8 @@ TIME:
             currBoard[i] = new Array(19);
             for (var j = 0; j < _gameHeight / proportion - 1; j++) {
                 //oreange monster
+                rand=Math.random();
+
                 if ((i === 0 && j === 0)) {
                     currBoard[i][j] = 5;
                     oMonster.i = i;
@@ -125,19 +138,37 @@ TIME:
                 }
                 //pacman
                 else if (gameBoard[i][j] === 0) {
-                    if (randomNum-10<=_foodCounter && _foodCounter<=randomNum+10 &&  pacman_remain === 1 && (i!=0 && j!=0 ) &&(i!=38 && j!=18 ) ) {
+                    if (randomNum - 10 <= locatePacman && locatePacman <= randomNum + 10 && pacman_remain === 1 && (i != 0 && j != 0 ) && (i != 38 && j != 18 )) {
                         currBoard[i][j] = 2;
                         pacmanShape.i = i;
                         pacmanShape.j = j;
                         pacman_remain--;
-
                     }
-                    //food
+                    else if ((blackCell===(foodIntervals + Math.floor(chngReminder)))) {
+                        if ((foodCounter % points25) === 0) {
+                            currBoard[i][j] = 25;
+                            foodCounter++;
+                        }
+                        else if ((foodCounter % points15) === 0) {
+                            currBoard[i][j] = 15;
+                            foodCounter++;
+                        }
+                        else {
+                            currBoard[i][j] = 0.05;
+                            foodCounter++;
+                        }
+                        if (chngReminder < 1)
+                            chngReminder =chngReminder+ constRemainder;
+                        else {
+                            chngReminder = chngReminder - 1.0;
+                        }
+                        blackCell=0;
+                    }
                     else {
-                        _foodCounter++;
-                        currBoard[i][j] = 0;
+                        currBoard[i][j] = 9;
                     }
-
+                    blackCell++;
+                    locatePacman++;
                 }
                 else if (gameBoard[i][j] === 1) {
                     currBoard[i][j] = 1;
@@ -273,24 +304,40 @@ TIME:
                     setPacmanEye(center.x, center.y);
                     context.fillStyle = "black"; //color
                     context.fill();
-                } else if (currBoard[i][j] == 0) {  //regular point
+                }
+                else if (currBoard[i][j] == 25) {  //regular point
                     context.beginPath();
-                    context.arc(center.x, center.y, 5, 0, 2 * Math.PI); // circle
+                    context.arc(center.x, center.y,12.5, 0, 2 * Math.PI); // circle
+                    context.fillStyle = "red"; //color
+                    context.closePath();
+                    context.fill();
+                    context.font = "10px Comic Sans MS";
+                    context.fillStyle = "black";
+                    context.textAlign = "center";
+                    context.fillText("25", center.x, center.y + 4);
+                }
+                else if (currBoard[i][j] == 15) {  //regular point
+                    context.beginPath();
+                    context.arc(center.x, center.y,10, 0, 2 * Math.PI); // circle
+                    context.fillStyle = "green"; //color
+                    context.closePath();
+                    context.fill();
+                    context.font = "10px Comic Sans MS";
+                    context.fillStyle = "black";
+                    context.textAlign = "center";
+                    context.fillText("15", center.x, center.y + 4);
+                }
+                else if (currBoard[i][j] == 0.05) {  //regular point
+                    context.beginPath();
+                    context.arc(center.x, center.y,7.5, 0, 2 * Math.PI); // circle
                     context.fillStyle = "yellow"; //color
                     context.closePath();
                     context.fill();
                     context.font = "10px Comic Sans MS";
-                    context.fillStyle = "yellow";
+                    context.fillStyle = "black";
                     context.textAlign = "center";
                     context.fillText("5", center.x, center.y + 4);
                 }
-//                else if (currBoard[i][j] == 4) {//wall
-//                    context.beginPath();
-//                    context.rect(center.x - 15, center.y - 15, 20, 30);
-//                    context.fillStyle = "blue";
-//                    context.fill();
-//
-//                }
                 else if (currBoard[i][j] == 5) {
 
                     context.drawImage(oMonster, i * 30+30, j * 30+30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
@@ -366,7 +413,7 @@ TIME:
         }
         if (currBoard[pacmanShape.i][pacmanShape.j] === 0) {
             score++;
-            _foodCounter--;
+            locatePacman--;
         }
 
         currBoard[pacmanShape.i][pacmanShape.j] = 2;
@@ -377,7 +424,7 @@ TIME:
             pac_color = "green";
         }
 
-        if (_foodCounter === 1) {
+        if (locatePacman === 1) {
             window.clearInterval(intervalPacman);
             window.alert("Game completed");
         }
