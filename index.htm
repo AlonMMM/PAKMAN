@@ -35,6 +35,7 @@ TIME:
     var _foodCounter;
     var _beforeMonsterCell = [0,0];
     var _monsterLastPosition = [[],[]];
+    var isSwapOtherSide = false;
 
 
 
@@ -104,7 +105,6 @@ TIME:
                     oMonster.j = j;
                     _monsterLastPosition[0] = [i,j];
                 }
-                
                 else if ((i === 38 && j === 18)) {
                     currBoard[i][j] = 6;
                     bMonster.i = i;
@@ -233,6 +233,7 @@ TIME:
             return 2;
         }
     }
+
     function Draw() {
         canvas.width = canvas.width; //clean board
         lblScore.value = score;
