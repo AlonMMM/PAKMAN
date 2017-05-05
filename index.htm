@@ -3,12 +3,14 @@
 
 <head></head>
 
-<body>SCORE:
+<body>
+document.write=(_playerName);
+<center>SCORE:
 <input id="lblScore" type="text"/>
 <br/>
 TIME:
 <input id="lblTime" type="text"/>
-<br/>
+<br/></center>
 <canvas id="canvas" height="680" width="1400" style="border: 2px solid black;"></canvas>
 
 
@@ -36,14 +38,13 @@ TIME:
     var locatePacman=0;
     var _beforeMonsterCell = [9,9];
     var _monsterLastPosition = [[],[]];
-
     var _lastPointsPositions = [];
     var _beforePointsCell=9;
     var ui_totalFood=90;
-
     var ui_monsterSpeed=2;
     var _monsterSpeedControl = 0;
     var _strawberryGotEaten = false;
+    var _playerName="ALON";
 
 
     Start();
@@ -145,8 +146,7 @@ TIME:
                         pacmanShape.i = i;
                         pacmanShape.j = j;
                         pacman_remain--;
-                    }
-                    else if ((blackCell===(foodIntervals + Math.floor(chngReminder)))) {
+                    }if ((blackCell===(foodIntervals + Math.floor(chngReminder)))) {
                         if ((foodCounter % points25) === 0) {
                             currBoard[i][j] = 25;
                             foodCounter++;
@@ -598,20 +598,19 @@ TIME:
         var arrLegalMoves = [];
 
         // collect to arr all possible moves
-        if ( right[0]<=(_gameWidth / proportion) - 2 && (currBoard[right[0]][right[1]] === 0 ||currBoard[right[0]][right[1]] === 9)
+        if ( right[0]<=(_gameWidth / proportion) - 2 && isPath(right[0],right[1])
             && !(_lastPointsPositions[0]===right[0] && _lastPointsPositions[1]===right[1])) {
             arrLegalMoves.push(right);
         }
         if ( left[0]>=0)
-            if (  (currBoard[left[0]][left[1]] === 0 ||currBoard[left[0]][left[1]] === 9)
-                && !(_lastPointsPositions[0]===left[0] && _lastPointsPositions[1]===left[1])) {
+            if (  isPath(left[0],left[1]) && !(_lastPointsPositions[0]===left[0] && _lastPointsPositions[1]===left[1])) {
                 arrLegalMoves.push(left);
             }
-        if ( up[1]>=0 && (currBoard[up[0]][up[1]] === 0 ||currBoard[up[0]][up[1]] === 9)
+        if ( up[1]>=0 && isPath(up[0],up[1])
             && !(_lastPointsPositions[0]===up[0] && _lastPointsPositions[1]===up[1])) {
             arrLegalMoves.push(up);
         }
-        if ( down[1]<=(_gameHeight / proportion) - 2 && (currBoard[down[0]][down[1]] === 0 ||currBoard[down[0]][down[1]] === 9)
+        if ( down[1]<=(_gameHeight / proportion) - 2 && isPath(down[0],down[1])
             && !(_lastPointsPositions[0]===down[0] && _lastPointsPositions[1]===down[1])) {
             arrLegalMoves.push(down);
         }
@@ -625,10 +624,28 @@ TIME:
         strawberry.j=arrLegalMoves[rand][1];
         //save the last location
         _beforePointsCell = currBoard[ strawberry.i][ strawberry.j];
-
         //update the boeard acordingli
         currBoard[strawberry.i][strawberry.j] = 4;
-
+    }
+    function isPath ( i,  j){
+        if (currBoard[i][j]===25 ||
+            currBoard[i][j]===15 ||
+            currBoard[i][j]===0.05 ||
+            currBoard[i][j]===9 )
+            return true;
+        else
+            return false;
+    }
+    function isPoints( i,  j){
+        if (currBoard[i][j]===25)
+            return 25;
+        else if(currBoard[i][j]===15)
+            return 15;
+        else if(currBoard[i][j]===0.05)
+            return 5;
+        else if(currBoard[i][j]===4)
+            return 50;
+        else return -1;
     }
 
 
