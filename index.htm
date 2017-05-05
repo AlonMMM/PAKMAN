@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <script>
+        var playerName = "ALON";
+        var numberLives = 3;
+        window.onload = function() {
+            //when the document is finished loading, replace everything
+            //between the <a ...> </a> tags with the value of splitText
+            document.getElementById("name").innerHTML=playerName;
+            document.getElementById("lives").innerHTML=numberLives;
+        }
+//        function generateImage() {
+//            var img = document.createElement('img')
+//            img.src =  'images/oMonster.jpg';
+//            return img;
+//        }
+//        for (var i = 0; i < numberLives; i++ ) {
+//            document.body.appendChild(generateImage());
+//        }
+    </script>
+</head>
+<h2>PLAYER: <span id="name"></span></h2> <h3>LIVES REMAIN: <span id="lives"></span></h3>
+<input id="new_game_button" type="button" value="Press for new game" onclick="Start();" />
 
-<head></head>
-
-<body>
-document.write=(_playerName);
-<center>SCORE:
+SCORE:
 <input id="lblScore" type="text"/>
 <br/>
 TIME:
 <input id="lblTime" type="text"/>
-<br/></center>
-<canvas id="canvas" height="680" width="1400" style="border: 2px solid black;"></canvas>
-
+<br/>
+<canvas id="canvas" height="630" width="1400" style="border: 2px solid black;"></canvas>
 
 <script type="text/javascript">
     var oMonster = new Image();
@@ -44,13 +61,11 @@ TIME:
     var ui_monsterSpeed=2;
     var _monsterSpeedControl = 0;
     var _strawberryGotEaten = false;
-    var _playerName="ALON";
 
 
     Start();
 
     var gameBoard = [[]];
-
     function Start() {
         var foodCounter=0;
         var points25=Math.floor(ui_totalFood/(10*ui_totalFood/100));
