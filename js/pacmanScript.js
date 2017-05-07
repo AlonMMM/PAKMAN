@@ -52,6 +52,8 @@ var _clockUpTime = 0;
 var gameBoard = [[]];
 
 function Start() {
+    document.getElementById("beginning_sound").pause();
+    document.getElementById("pacman_background").play();
     _pacmanLives = 3;
     _clockIsShow = false;
     _updatesCounter=0;
@@ -304,6 +306,7 @@ function Draw() {
     context.fillStyle = "black";
     context.fillRect(0, 0, canvas.width, canvas.height);
     drawPacmanMaze();
+    drawLives();
     for (var i = 0; i < _gameWidth / proportion - 1; i++) {
         for (var j = 0; j < _gameHeight / proportion - 1; j++) {
 
@@ -370,6 +373,25 @@ function Draw() {
 
 
         }
+    }
+}
+function drawLives() {
+    var center = {};
+    center.x = _gameWidth+30;
+    center.y = 0;
+    for(var i = 0; i<_pacmanLives;i++)
+    {
+
+        center.y += 32;
+        context.beginPath();
+        context.arc(center.x, center.y, 15, 0.15* Math.PI ,1.85 * Math.PI); // half circle
+        context.lineTo(center.x, center.y);
+        context.fillStyle = pac_color; //color
+        context.fill();
+        context.beginPath();
+        context.arc(center.x + 3.5, center.y - 10, 3, 0, 2 * Math.PI);
+        context.fillStyle = "black"; //color
+        context.fill();
     }
 
 
@@ -441,6 +463,7 @@ function UpdatePosition() {
     }
     var pointCollected = isPoints(pacmanShape.i, pacmanShape.j)
     if (pointCollected !== -1) {
+        document.getElementById("pacman_chomp").play();
         score += pointCollected;
         _foodCounter--;
     }
@@ -469,6 +492,7 @@ function UpdatePosition() {
         else if (monsterEatPacman()) {//if the monster catch the pacmam in her interval.
             Draw();
             window.clearInterval(intervalPacman);
+            document.getElementById("pacman_death").play();
             continueGame();
             return;
         }
@@ -507,6 +531,7 @@ function UpdatePosition() {
     //collusion pacman and ghost
     else if (monsterEatPacman()) {
         Draw();
+        document.getElementById("pacman_death").play();
         if (_pacmanLives === 0) {
             window.clearInterval(intervalPacman);
             window.alert("Game Over! you got eated 3 times..");
@@ -521,6 +546,7 @@ function UpdatePosition() {
     else if (!_strawberryGotEaten && pacmanGetStrawberry()) {
         //here made special sound..
         Draw();
+        document.getElementById("pacman_eatfruit").play();
         score = score + 50;
     }
     else {
@@ -781,6 +807,7 @@ function updatePointsPosition() {
 
     //update the boeard acordingli
     if (pacmanGetStrawberry()) {
+        document.getElementById("pacman_eatfruit").play();
         if (_beforePointsCell == 0.05 || _beforePointsCell == 15 || _beforePointsCell == 25) {
             _foodCounter--;
         }

@@ -59,8 +59,23 @@ SCORE:
 TIME:
 <input id="lblTime" type="text"/>
 <br/>
+<audio id="beginning_sound" loop="true" autoplay="true">
+    <source src="sounds/pacman_beginning.wav" type="audio/wav">
+</audio>
+<audio id="pacman_background" loop="true" autoplay="true">
+    <source src="sounds/pacman%20background%20music.ogg" type="audio/wav">
+</audio>
+<audio id="pacman_chomp" >
+    <source src="sounds/pacman_chomp.wav" type="audio/wav">
+</audio>
+<audio id="pacman_death" >
+    <source src="sounds/pacman_death.wav" type="audio/wav">
+</audio>
+<audio id="pacman_eatfruit" >
+    <source src="sounds/pacman_eatfruit.wav" type="audio/wav">
+</audio>
+
 <canvas id="canvas" height="630" width="1400" style="border: 2px solid black;"></canvas>
-<audio controls="controls"><source src="sounds/pacman_beginning.wav" type="audio/mpeg" /></audio>
 <script type="text/javascript" src=js/startScreen.js>
 </script>
 <script id="game" type="text/javascript" src=js/pacmanScript.js>
