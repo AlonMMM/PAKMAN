@@ -3,27 +3,16 @@
 <head>
     <script>
         var playerName = "ALON";
-        var numberLives = 3;
-
         window.onload = function() {
             //when the document is finished loading, replace everything
             //between the <a ...> </a> tags with the value of splitText
             document.getElementById("name").innerHTML=playerName;
-            document.getElementById("lives").innerHTML=numberLives;
         }
-//        function generateImage() {
-//            var img = document.createElement('img')
-//            img.src =  'images/oMonster.jpg';
-//            return img;
-//        }
-//        for (var i = 0; i < numberLives; i++ ) {
-//            document.body.appendChild(generateImage());
-//        }
     </script>
 </head>
 <link rel="stylesheet" type="text/css" href="css/myStyle.css">
 
-<h2>PLAYER: <span id="name"></span></h2> <h3>LIVES REMAIN: <span id="lives"></span></h3>
+<h2>PLAYER: <span id="name"></span></h2>
 <input id="new_game_button" href="css/myStyle.css" type="button" value="Press for new game" onclick="Start();" />
 
 <head></head>
