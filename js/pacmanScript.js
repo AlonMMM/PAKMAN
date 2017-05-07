@@ -51,7 +51,6 @@ var _clockIsShow;
 var _clockUpTime = 0;
 var gameBoard = [[]];
 
-
 function Start() {
     _pacmanLives = 3;
     _clockIsShow = false;
@@ -626,9 +625,7 @@ function continueGame() {
                 }
                 locatePacman++;
             }
-
         }
-
     }
     Draw();
     intervalPacman = setInterval(UpdatePosition, 125);
