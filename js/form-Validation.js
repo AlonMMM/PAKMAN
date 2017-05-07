@@ -1,16 +1,12 @@
 /**
  * Created by windows on 06/05/2017.
  */
-$().ready($(function() {
+$().ready($(function () {
 
-    $.validator.addMethod("isUserExists", function(user, element, regexpr) {
-        if ((user in users) === false)
-        {
-            return true; // username is free
-        } else {
-            return false; // username is taken
-        }
-    }, "username already exsists.");
+    $.validator.addMethod("isUserExist", function (user) {
+        return (user in users) == false;
+    }, "username already taken.");
+
     // add methods to the validator
     $.validator.addMethod("isCorrectPassword", function (value, element) {
         return this.optional(element) || /^(?=.*[a-zA-Z])(?=.*\d).*$/.test(value);
@@ -21,7 +17,7 @@ $().ready($(function() {
     }, "Name should contain only letters");
     // Initialize form validation on the registration form.
     // It has the name attribute "registration"
-    $("form[name='registration']").validate({
+    $("#sign_up").validate({
 
         // Specify validation rules
         rules: {
@@ -49,19 +45,18 @@ $().ready($(function() {
             password: {
                 required: true,
                 minlength: 8,
-                isCorrectPassword:true
+                isCorrectPassword: true
             }
 
         },
         // Specify validation error messages
         messages: {
             firstname: {
-                required:"Please enter your firstname"
+                required: "Please enter your firstname"
             },
-            lastname:
-                {
-                    required:"Please enter your lastname"
-                },
+            lastname: {
+                required: "Please enter your lastname"
+            },
             password: {
                 required: "Please provide a password",
                 minlength: "Your password must be at least 8 characters long"
@@ -74,16 +69,17 @@ $().ready($(function() {
         },
         // Make sure the form is submitted to the destination defined
         // in the "action" attribute of the form when valid
-        submitHandler: function(form) {
-                if ($("#sign_up").valid()) {
-                    users[$("#sign_up")[0].value] = $("#password")[0].value;
-                    $("#registrationDiv").hide();
-                    nick_name = $("#nick_name")[0].value;
-                }
+    });
+    $("#sign_up").submit(function (event) {
+        if ($("#sign_up").valid()) {
+            users[$("#nick_name")[0].value] = $("#password")[0].value;
+            $("#REGISTER").hide();
+            nick_name = $("#nick_name")[0].value;
+            logAfterRegister(nick_name);
         }
     });
 
-    for (var i = 1948; i <=2016 ; i++) {
+    for (var i = 1948; i <= 2016; i++) {
         var option = new Option();
         option.value = option.text = i;
         $("#year")[0].add(option);

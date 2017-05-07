@@ -3,7 +3,7 @@ body {
     font-size: 14px;
 }
 
-.regDiv {
+#REGISTER,#LOGIN {
     width: 500px;
     margin: 25px auto;
 }

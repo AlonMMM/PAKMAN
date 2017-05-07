@@ -2,7 +2,7 @@
  * Created by windows on 06/05/2017.
  */
 
-window.onload = function() {
+$(document).ready( function() {
 
 
     var canvas = document.getElementById("canvas"); // grabs the canvas element
@@ -11,5 +11,5 @@ window.onload = function() {
 
     img.src = "images/start_screen.jpg";
     context.drawImage(img,0,0, canvas.width, canvas.height);
-}
+});
 

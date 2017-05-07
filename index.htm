@@ -2,44 +2,36 @@
 <html>
 <head>
     <title>Pacman- Alon & Liron</title>
-    <script>
-        var playerName = "ALON";
-        window.onload = function() {
-            //when the document is finished loading, replace everything
-            //between the <a ...> </a> tags with the value of splitText
-            document.getElementById("name").innerHTML=playerName;
-            var canvas = document.getElementById("canvas"); // grabs the canvas element
-            var context = canvas.getContext("2d"); // returns the 2d context object
-            var img = new Image() //creates a variable for a new image
+    <script src="js/jQuery/jquery-3.2.0.min.js"></script>
+    <script src="js/jQuery/jquery.validate.min.js"></script>
+    <script type="text/javascript" src=js/navigator.js></script>
+    <script id="startScreen" type="text/javascript" src=js/startScreen.js></script>
+    <script type="text/javascript" src="js/form-Validation.js"></script>
 
-            img.src = "images/start_screen.jpg";
-            context.drawImage(img,0,0, canvas.width, canvas.height);
-        }
-    </script>
+    <link rel="stylesheet" type="text/css" href="css/myStyle.css">
+    <link rel="stylesheet" type="text/css" href="css/registration_StyleSheet.css">
 </head>
-<link rel="stylesheet" type="text/css" href="css/myStyle.css">
 
-<script type="text/javascript" src=js/nav.js></script>
+
 <!--<h2>PLAYER: <span id="name"></span></h2>-->
 <!--<input id="new_game_button" href="css/myStyle.css" type="button" value="Press for new game" onclick="Start();" />-->
 
-<head></head>
 <body>
 <div id="menu">
-    <div id= "logo">
-        <h1>PA<a href="/img2.jpg"><img src='images/pacman.PNG' alt="HTML5 Icon" style="width:70px;height:70px;"></a>MAN - A & L </h1>
+    <div id="logo">
+        <h1>PA<a href="/img2.jpg"><img src='images/pacman.PNG' alt="HTML5 Icon" style="width:70px;height:70px;"></a>MAN
+            - A & L </h1>
     </div>
     <li><a class="links" href='#' id="lWELCOME">WELCOME</a></li>
-    <li><a class="links" href='#' id="lPLAY">PLAY</a></li>
     <li><a class="links" href='#' id="lLOGIN">LOGIN</a></li>
     <li><a class="links" href='#' id="lREGISTER">REGISTER</a></li>
     <li><a class="links" href='#' id="lABOUT">ABOUT</a></li>
-    </div>
+</div>
 </div>
 </br></br></br></br></br></br></br>
 
 
-<div id="WELCOME" class="divs" >
+<div id="WELCOME" class="divs">
     WELCOME
     WELCOME
     WELCOME
@@ -50,57 +42,62 @@
     WELCOME
 </div>
 
+<div id="LOGIN" class="divs">
 
-<div id="PLAY" class="divs" >
-<h2>PLAYER: <span id="name"></span></h2>
-<input id="new_game_button" href="css/myStyle.css" type="button" value="Press for new game" onclick="Start();" />
-SCORE:
-<input id="lblScore" type="text" />
-TIME:
-<input id="lblTime" type="text"/>
-<br/>
-<audio id="beginning_sound" loop="true" autoplay="true">
-    <source src="sounds/pacman_beginning.wav" type="audio/wav">
-</audio>
-<audio id="pacman_background" loop="true" autoplay="true">
-    <source src="sounds/pacman%20background%20music.ogg" type="audio/wav">
-</audio>
-<audio id="pacman_chomp" >
-    <source src="sounds/pacman_chomp.wav" type="audio/wav">
-</audio>
-<audio id="pacman_death" >
-    <source src="sounds/pacman_death.wav" type="audio/wav">
-</audio>
-<audio id="pacman_eatfruit" >
-    <source src="sounds/pacman_eatfruit.wav" type="audio/wav">
-</audio>
+    <form action="" name="login" id="log_in">
+        <label for="nick_name">Nick Name</label>
+        <input type="text" name="nick_name" id="log_in_name" placeholder=""/>
 
-<canvas id="canvas" height="630" width="1400" style="border: 2px solid black;"></canvas>
-<script type="text/javascript" src=js/startScreen.js>
-</script>
-<script id="game" type="text/javascript" src=js/pacmanScript.js>
-</script>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="log_in_password" placeholder=""/>
+        <button type="submit" onclick="logIn()">LOG IN </button>
+    </form>
+
 </div>
 
-<div id="LOGIN" class="divs" >
-    LOGIN
-    LOGIN
-    LOGIN
-    LOGIN
-    LOGIN
-    LOGIN
+<div id="REGISTER" class="divs">
+
+        <h2>Registration</h2>
+        <form action="mailto: alonmor89@gmail.com" name="registration" id="sign_up">
+            <label for="nick_name">Nick Name</label>
+            <input type="text" name="nick_name" id="nick_name" placeholder=""/>
+
+            <label for="firstname">First Name</label>
+            <input type="text" name="firstname" id="firstname" placeholder=""/>
+
+            <label for="lastname">Last Name</label>
+            <input type="text" name="lastname" id="lastname" placeholder=""/>
+
+            <label><b>Birthday: </b></label>
+            Day:
+            <select name="day" id="day" class="birth">
+                <option value="">select</option>
+            </select>
+
+            Month:
+            <select name="month" id="month" class="birth">
+                <option value="">select</option>
+            </select>
+            Year:
+            <select name="year" id="year" class="birth">
+                <option value="">select</option>
+            </select>
+
+
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder=""/>
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder=""/>
+
+
+            <button type="submit">Register</button>
+
+        </form>
+
 </div>
 
-<div id="REGISTER" class="divs" >
-    REGISTER
-    REGISTER
-    REGISTER
-    REGISTER
-    REGISTER
-    REGISTER
-</div>
-
-<div id="ABOUT" class="divs" >
+<div id="ABOUT" class="divs">
     about
     about
     about
@@ -109,8 +106,44 @@ TIME:
     about
 </div>
 
+<div id="PLAY" class="divs">
 
-<script type="text/javascript" src=js/nav.js></script>
+    <canvas id="canvas" height="630" width="1400" style="border: 2px solid black;"></canvas>
+    <script id="game" type="text/javascript" src=js/pacmanScript.js></script>
+
+    <input id="new_game_button" href="css/myStyle.css" type="button" value="Press for new game" onclick="Start();"/>
+    SCORE:
+    <lable id="usrlbl" value=""></lable>
+    <input id="lblScore" type="text"/>
+    TIME:
+    <input id="lblTime" type="text"/>
+    <br/>
+    <audio id="beginning_sound" loop="true" autoplay="true">
+        <source src="sounds/pacman_beginning.wav" type="audio/wav">
+    </audio>
+    <audio id="pacman_background" loop="true" autoplay="true">
+        <source src="sounds/pacman%20background%20music.ogg" type="audio/wav">
+    </audio>
+    <audio id="pacman_chomp">
+        <source src="sounds/pacman_chomp.wav" type="audio/wav">
+    </audio>
+    <audio id="pacman_death">
+        <source src="sounds/pacman_death.wav" type="audio/wav">
+    </audio>
+    <audio id="pacman_eatfruit">
+        <source src="sounds/pacman_eatfruit.wav" type="audio/wav">
+    </audio>
+
+
+
+</div>
+<footer id="footer">
+    <h3> CONTACT US: alonmor89@gmail.com & lironseliktar@gmail.com </h3>
+</footer>
 </body>
 
 </html>
+
+
+
+
