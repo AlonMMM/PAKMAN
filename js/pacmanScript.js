@@ -66,21 +66,21 @@ function Start() {
 
     var points25 = Math.floor(ui_totalFood / (10 * ui_totalFood / 100));
     var points15 = Math.floor(ui_totalFood / (30 * ui_totalFood / 100));
-    var foodIntervals = Math.floor(288 / ui_totalFood)+1;
-    var constRemainder = 1.0 * (288 / ui_totalFood) +1- foodIntervals;
-    var chngReminder = constRemainder;
-    var blackCell  = 0;
+    var blackCell  = 1;
     var randomNum = Math.floor((Math.random() * 285 + 1));
     var rand;
     var pacman_remain = 1;
 
+    var cnt = 284;
+
+    var foodRemain = ui_totalFood;
     //create the board - pacman and food .
     for (var i = 0; i < _gameWidth / proportion - 1; i++) {
         currBoard[i] = new Array(19);
         for (var j = 0; j < _gameHeight / proportion - 1; j++) {
             //oreange monster
             rand = Math.random();
-
+            var randomNumFood = Math.random();
             if ((i === 0 && j === 0)) {
                 currBoard[i][j] = 5;
                 oMonster.i = i;
@@ -109,7 +109,8 @@ function Start() {
                     pacmanShape.j = j;
                     pacman_remain--;
                 }
-                if ((blackCell === (foodIntervals + Math.floor(chngReminder)))) {
+                if(randomNumFood<=1.0 * foodRemain/cnt){
+                    foodRemain--;
                     if ((_foodCounter % points25) === 0) {
                         currBoard[i][j] = 25;
 
@@ -120,19 +121,16 @@ function Start() {
                     else {
                         currBoard[i][j] = 0.05;
                     }
-                    if (chngReminder < 1)
-                        chngReminder = chngReminder + constRemainder;
-                    else {
-                        chngReminder = chngReminder - 1.0;
-                    }
-                    blackCell = 0;
+
                     _foodCounter++;
                 }
                 else {
                     currBoard[i][j] = 9;
+                    blackCell++;
                 }
-                blackCell++;
+
                 locatePacman++;
+                cnt--;
             }
             else if (gameBoard[i][j] === 1) {
                 currBoard[i][j] = 1;
@@ -147,7 +145,6 @@ function Start() {
     addEventListener("keyup", function (e) {
         keysDown[e.keyCode] = false;
     }, false);
-    //intervalMonsters = setInterval(updateMonsterPosition,300);
 
     if (intervalPacman) {
         window.clearInterval(intervalPacman);
@@ -175,7 +172,7 @@ function startInitializer(){
     m_currDirection=4;
 
     _randomUpdatesToShowClock = Math.floor((Math.random() * 100 + 1 ));
-    _clockTimeRemaind = 50;
+    _clockTimeRemaind = 30;
 
     //initilize board
     gameBoard = [
@@ -526,7 +523,7 @@ function UpdatePosition() {
     {
         initialClock();
         currBoard[pacmanShape.i][pacmanShape.j] = 2;
-        _clockUpTime+=100;
+        _clockUpTime+=15;
     }
     currentTime=currentTime.setSeconds(currentTime.getSeconds() - _clockUpTime);
     time_elapsed = (start_time-currentTime) / 1000;

@@ -44,12 +44,12 @@
 
 <div id="LOGIN" class="divs">
 
-    <form action="javascript:logIn()" id="log_in" name="login" >
+    <form action="javascript:logIn()" id="log_in" name="login"  >
         <label class="registrationAndLogIn"  for="nick_name">Nick Name</label>
-        <input type="text" name="nick_name" id="log_in_name" placeholder=""/>
+        <input type="text" name="nick_name" id="log_in_name" placeholder="Enter your user name"/>
 
         <label class="registrationAndLogIn" for="password">Password</label>
-        <input type="password" name="password" id="log_in_password" placeholder=""/>
+        <input type="password" name="password" id="log_in_password" placeholder="Enter your password"/>
         <button>LOGIN</button>
     </form>
 
@@ -60,35 +60,40 @@
         <h2>Registration</h2>
         <form action="mailto: alonmor89@gmail.com" name="registration" id="sign_up">
             <label class="registrationAndLogIn" for="nick_name">Nick Name</label>
-            <input type="text" name="nick_name" id="nick_name" placeholder=""/>
+            <input type="text" name="nick_name" id="nick_name" placeholder="Enter user name"/>
 
             <label class="registrationAndLogIn" for="firstname">First Name</label>
-            <input type="text" name="firstname" id="firstname" placeholder=""/>
+            <input type="text" name="firstname" id="firstname" placeholder="Enter yor first name"/>
 
             <label class="registrationAndLogIn" for="lastname">Last Name</label>
-            <input type="text" name="lastname" id="lastname" placeholder=""/>
+            <input type="text" name="lastname" id="lastname" placeholder="Enter yor last name"/>
 
             <label><b>Birthday: </b></label>
             Day:
-            <select name="day" id="day" class="birth">
-                <option value="">select</option>
+            <select name="daySelect" id="day" class="birth">
+                <option value="select">select</option>
+            </select>
+            <br>
+            <br>
+            Month:
+            <select name="monthSelect" id="month" class="birth">
+                <option value="select">select</option>
+            </select>
+            <br>
+            <br>
+            Year:
+            <select name="yearSelect" id="year" class="birth">
+                <option value="select">select</option>
             </select>
 
-            Month:
-            <select name="month" id="month" class="birth">
-                <option value="">select</option>
-            </select>
-            Year:
-            <select name="year" id="year" class="birth">
-                <option value="">select</option>
-            </select>
+
 
 
             <label class="registrationAndLogIn" for="email">Email</label>
-            <input type="email" name="email" id="email" placeholder=""/>
+            <input type="text" name="email" id="email" placeholder="Enter your email"/>
 
             <label class="registrationAndLogIn" for="password">Password</label>
-            <input type="password" name="password" id="password" placeholder=""/>
+            <input type="password" name="password" id="password" placeholder="Enter password"/>
 
 
             <button type="submit">Register</button>
@@ -110,7 +115,7 @@
 
     <div id="the_game">
     <canvas id="canvas" height="630" width="1270" style="border: 2px solid black;"></canvas>
-    <h2><input id="new_game_button" href="css/myStyle.css" type="button" value="Press for new game" onclick="Start();"/>
+    <h2 id="game_details"><input id="new_game_button" href="css/myStyle.css" type="button" value="Press for new game" onclick="Start();"/>
         SCORE:
         <input id="lblScore" type="text"/>
         TIME:

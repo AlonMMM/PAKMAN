@@ -61,6 +61,7 @@ function logIn() {
         current_user = entered_user;
         $("#LOGIN").hide();
         logAfterRegister(entered_user);
+        drawCanvasPic();
 
     }
     else
@@ -71,7 +72,7 @@ function logAfterRegister(name) {
     current_user = name;
     $("#REGISTER").hide();
     $("#PLAY").show();
-    $("#menu").append("<div id='helloUserName'><b > Hello " + current_user + " </b>  " + " <a class='links' href='#' id='disconnect' onclick='disconnect();'>disconnect </a></div></li>");
+    $("#menu").append("<div id='helloUserName'><b id='helloUserName'> Hello " + current_user + " </b>  " + " <a class='links' href='#' id='disconnect' onclick='disconnect();'>disconnect </a></div></li>");
     isLogedIn = true;
 }
 
@@ -95,7 +96,25 @@ function gameSetting() {
     var points15 = $("#15Point")[0].value;
     var points5 = $("#5Point")[0].value;
 
-    pacmanSetParameters(numberOfBalls,time,numberOfMonsters,points5,points15,points25);
-    Start();
-
+    if(numberOfBalls<50 || numberOfBalls>90 || numberOfMonsters<1 || numberOfMonsters>3 || time<60)
+    {
+        window.alert("You type one or more bad inputs, please follow the order for legal setting");
+    }
+    else {
+        $("#game_details").show();
+        pacmanSetParameters(numberOfBalls, time, numberOfMonsters, points5, points15, points25);
+        Start();
+    }
 }
+
+function drawCanvasPic() {
+
+
+    var canvas = document.getElementById("canvas"); // grabs the canvas element
+    var context = canvas.getContext("2d"); // returns the 2d context object
+    var img = new Image() //creates a variable for a new image
+
+    img.src = "images/start_screen.jpg";
+    context.drawImage(img,0,0, canvas.width, canvas.height);
+}
+
