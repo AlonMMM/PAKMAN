@@ -4,10 +4,11 @@
 
 var oMonster = new Image();
 var bMonster = new Image();
+var gMonster= new Image();
 var strawberry = new Image();
 var clock = new Image();
 
-var _monsters = [oMonster, bMonster];
+var _monsters = [oMonster, bMonster,gMonster];
 var canvas ;
 var context;
 var _gameWidth = 1200;   //the game board width
@@ -24,7 +25,7 @@ var intervalPacman;
 var m_currDirection;
 var locatePacman;
 var _beforeMonsterCell = [9, 9, 9];
-var _monsterLastPosition = [[], []];    //save the monsters last positions
+var _monsterLastPosition = [[], [], []];    //save the monsters last positions
 var _numberOfMonster;
 
 var colorOf5Points;
@@ -88,11 +89,17 @@ function Start() {
                 _monsterLastPosition[0] = [i, j];
             }
             //blue monster
-            else if ((i === 38 && j === 18)) {
+            else if ((i === 38 && j === 18) &&_numberOfMonster>1) {
                 currBoard[i][j] = 6;
                 bMonster.i = i;
                 bMonster.j = j;
                 _monsterLastPosition[1] = [i, j];
+            }
+            else if ((i === 38 && j === 0) &&_numberOfMonster>2) {
+                currBoard[i][j] = 7;
+                gMonster.i = i;
+                gMonster.j = j;
+                _monsterLastPosition[2] = [i, j];
             }
             //define strawberry
             else if ((i === 0 && j === 18)) {
@@ -163,6 +170,7 @@ function startInitializer(){
 
     oMonster.src = 'images/oMonster.jpg';
     bMonster.src = 'images/bMonster.jpg';
+    gMonster.src= 'images/gMonster.jpg';
     strawberry.src = 'images/strawberry.JPG';
     clock.src = 'images/clock.PNG';
     _pacmanLives = 3;
@@ -388,6 +396,9 @@ function Draw() {
             }
             else if (currBoard[i][j] === 6) { //monster2
                 context.drawImage(bMonster, i * 30 + 30, j * 30 + 30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
+            }
+            else if (currBoard[i][j] === 7) { //monster2
+                context.drawImage(gMonster, i * 30 + 30, j * 30 + 30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
             }
             else if (currBoard[i][j] === 4) { //strawberry
                 context.drawImage(strawberry, i * 30 + 30, j * 30 + 30, (_gameWidth / proportion) - 10, _gameHeight / proportion + 10);
@@ -627,7 +638,7 @@ function showClock() {
 function continueGame() {
     //initial monsters
     _pacmanLives--;
-    for (var i = 0; i < _monsters.length; i++) {
+    for (var i = 0; i < _numberOfMonster; i++) {
         var monster = _monsters[i];
         currBoard[monster.i][monster.j] = _beforeMonsterCell[i];
         if (i === 0) {
@@ -646,8 +657,8 @@ function continueGame() {
             monster.j = 0;
         }
     }
-    _beforeMonsterCell = [9, 9];
-    _monsterLastPosition = [[], []];
+    _beforeMonsterCell = [9, 9, 9];
+    _monsterLastPosition = [[], [], []];
 
     //initial pacman
     m_currDirection = 4;
@@ -674,7 +685,9 @@ function continueGame() {
 
 
 function updateMonsterPosition() {
-    for (var i = 0; i < _monsters.length; i++) {
+   // for (var i = 0; i < _monsters.length; i++) {
+
+    for (var i = 0; i < _numberOfMonster; i++) {
         var monster = _monsters[i];
         currBoard[monster.i][monster.j] = _beforeMonsterCell[i];
 

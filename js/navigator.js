@@ -99,3 +99,14 @@ function gameSetting() {
     Start();
 
 }
+
+function loginFromWelcome()
+{
+    $("#WELCOME").hide();
+    $("#LOGIN").show();
+}
+
+function RegisterFromWelcome(){
+    $("#WELCOME").hide();
+    $("#REGISTER").show();
+}
