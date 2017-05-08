@@ -20,7 +20,7 @@ form label,
 form input,
 form button {
     border: 0;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
     display: block;
     width: 100%;
 }
@@ -37,11 +37,39 @@ form input {
 form button {
     height: 30px;
     line-height: 30px;
-    background: #954b21;
+    background: #5a8ff5;
     color: #fff;
     margin-top: 10px;
     cursor: pointer;
 }
 form .error {
     color: #5a8ff5;
+}
+
+
+#game_set
+{
+    padding: 20px;
+    background: #2e466e;
+    color: #fff;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+#game_set input{
+    height: 25px;
+    line-height: 25px;
+    background: #fff;
+    width: 300px;
+    color: #000;
+    padding: 0 6px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+}
+
+#25Point {
+    width: 25px;
+
 }

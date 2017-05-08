@@ -83,6 +83,9 @@
     top:1px;
 }
 
+body{
+    background-color: lightskyblue;
+}
 
 #menu
 {
@@ -115,12 +118,30 @@ li a{
     color: white;
 }
 li a:hover {
-    font-size: 140%;
+    font-size: 125%;
     background: yellow;
 }
 
-.divs {
+.divs{
     display: none;
-    font-family: "Impact";
+}
 
+#disconnect{
+    color: blue;
+
+    font-family: Impact;
+    font-size: 20px;
+    padding: 35px 30px;
+}
+
+#game_settings{
+    background-color: #2e466e;
+}
+
+#PLAY div{
+    float: left;
+
+}
+#the_game{
+    width: 1500px;
 }

@@ -6,123 +6,74 @@ var oMonster = new Image();
 var bMonster = new Image();
 var strawberry = new Image();
 var clock = new Image();
-oMonster.src = 'images/oMonster.jpg';
-bMonster.src = 'images/bMonster.jpg';
-strawberry.src = 'images/strawberry.JPG';
-clock.src = 'images/clock.PNG';
 
 var _monsters = [oMonster, bMonster];
-var canvas = document.getElementById("canvas");
-var context = canvas.getContext("2d");
+var canvas ;
+var context;
 var _gameWidth = 1200;   //the game board width
 var _gameHeight = 600;    //the game board height
 var proportion = 30;    //cell size
 var pacmanShape = {};   //the object pacman
-var _foodCounter = 0;   //count the food in bard
+var _foodCounter;   //count the food in bard
 var currBoard;
 var score;
 var pac_color;
 var start_time;
 var time_elapsed;
 var intervalPacman;
-var m_currDirection = 4;
-var locatePacman = 0;
+var m_currDirection;
+var locatePacman;
 var _beforeMonsterCell = [9, 9, 9];
 var _monsterLastPosition = [[], []];    //save the monsters last positions
+var _numberOfMonster;
+
+var colorOf5Points;
+var colorOf15Points;
+var colorOf25Points;
 
 
 var _lastPointsPositions = [];  //strewbbery last position
 var _beforePointsCell = 9;     //value of cell strewbbery last position
-var ui_totalFood = 90;         //user input number of points
+var ui_totalFood;         //user input number of points
 
 var ui_monsterSpeed = 2;       //user input for monster speed
 var _monsterSpeedControl = 0;
 var _pacmanLives;
-var _strawberryGotEaten = false;
+var _strawberryGotEaten ;
 
 var ui_gameSpeed;
-var ui_gameTime;
+var ui_gameTime=100;
 
 //for the clock feature
 var _clockTimeRemaind;
 var _randomUpdatesToShowClock;
 var _updatesCounter;
 var _clockIsShow;
-var _clockUpTime = 0;
+var _clockUpTime ;
 var gameBoard = [[]];
 
+function pacmanSetParameters(numberOfBalls, time, numberOfMonsters, points5, points15, points25) {
+    ui_totalFood=numberOfBalls ;
+    ui_gameTime = parseInt(time);
+    _numberOfMonster=numberOfMonsters;
+    colorOf5Points= points5;
+    colorOf15Points=points15;
+    colorOf25Points=points25;
+}
+
 function Start() {
-    document.getElementById("beginning_sound").pause();
-    document.getElementById("pacman_background").play();
-    _pacmanLives = 3;
-    _clockIsShow = false;
-    _updatesCounter=0;
-    ui_gameSpeed = 125;
-    ui_gameTime = 250;
-    _clockUpTime=0;
+    startInitializer();
 
     var points25 = Math.floor(ui_totalFood / (10 * ui_totalFood / 100));
     var points15 = Math.floor(ui_totalFood / (30 * ui_totalFood / 100));
-    // var _points5= Math.floor(ui_totalFood/(60*ui_totalFood/100));
-    var foodIntervals = Math.floor(288 / ui_totalFood);
-    var constRemainder = 1.0 * (288 / ui_totalFood) - foodIntervals;
+    var foodIntervals = Math.floor(288 / ui_totalFood)+1;
+    var constRemainder = 1.0 * (288 / ui_totalFood) +1- foodIntervals;
     var chngReminder = constRemainder;
-    var blackCell = 0;
+    var blackCell  = 0;
     var randomNum = Math.floor((Math.random() * 285 + 1));
-
-    _randomUpdatesToShowClock = Math.floor((Math.random() * 100 + 1 ));
-    _clockTimeRemaind = 80;
-    gameBoard = [
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-    ];
-    score = 0;
-    pac_color = "yellow";
-    currBoard = new Array(39);
-    /*   var cnt = 800;
-     var food_remain = 200;
-     */
     var rand;
     var pacman_remain = 1;
-    start_time = new Date();
-    start_time=start_time.setSeconds(start_time.getSeconds() + ui_gameTime);
+
     //create the board - pacman and food .
     for (var i = 0; i < _gameWidth / proportion - 1; i++) {
         currBoard[i] = new Array(19);
@@ -202,6 +153,80 @@ function Start() {
         window.clearInterval(intervalPacman);
     }
     intervalPacman = setInterval(UpdatePosition, ui_gameSpeed);
+}
+
+function startInitializer(){
+    canvas = document.getElementById("canvas");
+    context=canvas.getContext("2d");
+    document.getElementById("beginning_sound").pause();
+    document.getElementById("pacman_background").play();
+
+    oMonster.src = 'images/oMonster.jpg';
+    bMonster.src = 'images/bMonster.jpg';
+    strawberry.src = 'images/strawberry.JPG';
+    clock.src = 'images/clock.PNG';
+    _pacmanLives = 3;
+    _clockIsShow = false;
+    _updatesCounter=0;
+    ui_gameSpeed = 125;
+    _strawberryGotEaten = false;
+    locatePacman = 0;
+    _foodCounter=0;
+    m_currDirection=4;
+
+    _randomUpdatesToShowClock = Math.floor((Math.random() * 100 + 1 ));
+    _clockTimeRemaind = 50;
+
+    //initilize board
+    gameBoard = [
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+    ];
+    score = 0;
+    pac_color = "yellow";
+    currBoard = new Array(39);
+
+    start_time = new Date();
+    start_time=start_time.setSeconds(start_time.getSeconds() + ui_gameTime);
+
+    _clockUpTime=0;
 }
 
 
@@ -327,7 +352,7 @@ function Draw() {
             else if (currBoard[i][j] === 25) {  //regular point
                 context.beginPath();
                 context.arc(center.x, center.y, 10, 0, 2 * Math.PI); // circle
-                context.fillStyle = "red"; //color
+                context.fillStyle = colorOf25Points; //color
                 context.closePath();
                 context.fill();
                 context.font = "10px Comic Sans MS";
@@ -338,7 +363,7 @@ function Draw() {
             else if (currBoard[i][j] === 15) {  //regular point
                 context.beginPath();
                 context.arc(center.x, center.y, 8, 0, 2 * Math.PI); // circle
-                context.fillStyle = "green"; //color
+                context.fillStyle = colorOf15Points; //color
                 context.closePath();
                 context.fill();
                 context.font = "10px Comic Sans MS";
@@ -349,7 +374,7 @@ function Draw() {
             else if (currBoard[i][j] === 0.05) {  //regular point
                 context.beginPath();
                 context.arc(center.x, center.y, 5, 0, 2 * Math.PI); // circle
-                context.fillStyle = "yellow"; //color
+                context.fillStyle = colorOf5Points; //color
                 context.closePath();
                 context.fill();
                 context.font = "10px Comic Sans MS";
@@ -395,16 +420,6 @@ function drawLives() {
     }
 
 
-}
-
-function toDrawClock() {
-    if (_randomUpdatesToShowClock >= _updatesCounter && _randomUpdatesToShowClock + _clockTimeRemaind < _updatesCounter) {
-        return true;
-    }
-    else if (_randomUpdatesToShowClock + _clockTimeRemaind === _updatesCounter) {
-        _randomUpdatesToShowClock += _randomUpdatesToShowClock;
-    }
-    return false;
 }
 
 function setPacmanEye(centerX, centerY) {
@@ -559,7 +574,7 @@ function UpdatePosition() {
 function initialClock()
 {
     _updatesCounter = 0;
-    _randomUpdatesToShowClock = Math.floor((Math.random() * 50 ));
+    _randomUpdatesToShowClock = Math.floor((Math.random() * 75 ));
     _clockIsShow=false;
 
 }
@@ -796,10 +811,17 @@ function updatePointsPosition() {
     }
     //choose random move from the legals
     var len = arrLegalMoves.length;
-    var rand = Math.floor((Math.random() * len));
+
     _lastPointsPositions[0] = strawberry.i;
     _lastPointsPositions[1] = strawberry.j;
     //move the points there
+    if(len===0)
+    {
+        arrLegalMoves.push(_lastPointsPositions);
+        len=1;
+
+    }
+    var rand = Math.floor((Math.random() * len));
     strawberry.i = arrLegalMoves[rand][0];
     strawberry.j = arrLegalMoves[rand][1];
     //save the last location
