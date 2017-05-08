@@ -5,7 +5,6 @@
     <script src="js/jQuery/jquery-3.2.0.min.js"></script>
     <script src="js/jQuery/jquery.validate.min.js"></script>
     <script type="text/javascript" src=js/navigator.js></script>
-    <script id="startScreen" type="text/javascript" src=js/startScreen.js></script>
     <script type="text/javascript" src="js/form-Validation.js"></script>
     <script id="game" type="text/javascript" src=js/pacmanScript.js></script>
 
@@ -83,10 +82,6 @@
             <select name="yearSelect" id="year" class="birth">
                 <option value="select">select</option>
             </select>
-
-
-
-
             <label class="registrationAndLogIn" for="email">Email</label>
             <input type="text" name="email" id="email" placeholder="Enter your email"/>
 
@@ -156,6 +151,12 @@
 
             <label class="color_setting" for="5Point">5 Points</label>
             <input type="color" id="5Point" name="5Point" value="#ff0000">
+
+            <br>
+            Difficulty:
+            <select name="difficulty" id="difficulty" class="birth">
+                <option value="Easy">Easy</option>
+            </select>
 
             <button>Start</button>
         </form>

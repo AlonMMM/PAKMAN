@@ -8,7 +8,7 @@ var gMonster= new Image();
 var strawberry = new Image();
 var clock = new Image();
 
-var _monsters = [oMonster, bMonster,gMonster];
+var _monsters = [];
 var canvas ;
 var context;
 var _gameWidth = 1200;   //the game board width
@@ -37,7 +37,7 @@ var _lastPointsPositions = [];  //strewbbery last position
 var _beforePointsCell = 9;     //value of cell strewbbery last position
 var ui_totalFood;         //user input number of points
 
-var ui_monsterSpeed = 2;       //user input for monster speed
+var ui_monsterSpeed;       //user input for monster speed
 var _monsterSpeedControl = 0;
 var _pacmanLives;
 var _strawberryGotEaten ;
@@ -53,13 +53,27 @@ var _clockIsShow;
 var _clockUpTime ;
 var gameBoard = [[]];
 
-function pacmanSetParameters(numberOfBalls, time, numberOfMonsters, points5, points15, points25) {
+function pacmanSetParameters(numberOfBalls, time, numberOfMonsters, points5, points15, points25, gameSpeed, monstersSpeed) {
     ui_totalFood=numberOfBalls ;
     ui_gameTime = parseInt(time);
     _numberOfMonster=numberOfMonsters;
+    if(_numberOfMonster==="1")
+    {
+        _monsters = [oMonster];
+    }
+    else if(_numberOfMonster==="2")
+    {
+        _monsters = [oMonster,bMonster];
+    }
+    else if(_numberOfMonster==="3")
+    {
+        _monsters = [oMonster,bMonster,gMonster];
+    }
     colorOf5Points= points5;
     colorOf15Points=points15;
     colorOf25Points=points25;
+    ui_gameSpeed = gameSpeed;
+    ui_monsterSpeed = monstersSpeed;
 }
 
 function Start() {
@@ -73,7 +87,7 @@ function Start() {
     var pacman_remain = 1;
 
     var cnt = 284;
-
+    var food = 0;
     var foodRemain = ui_totalFood;
     //create the board - pacman and food .
     for (var i = 0; i < _gameWidth / proportion - 1; i++) {
@@ -82,6 +96,12 @@ function Start() {
             //oreange monster
             rand = Math.random();
             var randomNumFood = Math.random();
+            // if(_numberOfMonster<2 && currBoard[i][j] === 6){
+            //     currBoard[i][j]=9;
+            // }
+            // if(_numberOfMonster<3 && currBoard[i][j] === 7){
+            //     currBoard[i][j]=9;
+            // }
             if ((i === 0 && j === 0)) {
                 currBoard[i][j] = 5;
                 oMonster.i = i;
@@ -89,12 +109,13 @@ function Start() {
                 _monsterLastPosition[0] = [i, j];
             }
             //blue monster
-            else if ((i === 38 && j === 18) &&_numberOfMonster>1) {
+            else if ((i === 38 && j === 18) && _numberOfMonster>1) {
                 currBoard[i][j] = 6;
                 bMonster.i = i;
                 bMonster.j = j;
                 _monsterLastPosition[1] = [i, j];
             }
+            //grey monster
             else if ((i === 38 && j === 0) &&_numberOfMonster>2) {
                 currBoard[i][j] = 7;
                 gMonster.i = i;
@@ -118,30 +139,29 @@ function Start() {
                 }
                 if(randomNumFood<=1.0 * foodRemain/cnt){
                     foodRemain--;
-                    if ((_foodCounter % points25) === 0) {
+                    if ((food % points25) === 0) {
                         currBoard[i][j] = 25;
 
                     }
-                    else if ((_foodCounter % points15) === 0) {
+                    else if ((food % points15) === 0) {
                         currBoard[i][j] = 15;
                     }
                     else {
                         currBoard[i][j] = 0.05;
                     }
-
-                    _foodCounter++;
+                    food++;
                 }
                 else {
                     currBoard[i][j] = 9;
                     blackCell++;
                 }
-
                 locatePacman++;
                 cnt--;
             }
             else if (gameBoard[i][j] === 1) {
                 currBoard[i][j] = 1;
             }
+
         }
     }
     Draw();
@@ -173,12 +193,10 @@ function startInitializer(){
     _pacmanLives = 3;
     _clockIsShow = false;
     _updatesCounter=0;
-    ui_gameSpeed = 125;
     _strawberryGotEaten = false;
     locatePacman = 0;
-    _foodCounter=0;
+    _foodCounter=ui_totalFood;
     m_currDirection=4;
-
     _randomUpdatesToShowClock = Math.floor((Math.random() * 100 + 1 ));
     _clockTimeRemaind = 30;
 
@@ -509,7 +527,7 @@ function UpdatePosition() {
 
         if (_pacmanLives === 0) {
             window.clearInterval(intervalPacman);
-            window.alert("Game Over!");
+            window.alert("You lost!");
             return;
         }
         else if (monsterEatPacman()) {//if the monster catch the pacmam in her interval.
@@ -538,7 +556,7 @@ function UpdatePosition() {
     }
     currentTime=currentTime.setSeconds(currentTime.getSeconds() - _clockUpTime);
     time_elapsed = (start_time-currentTime) / 1000;
-    if (score >= 150 && time_elapsed <= 10) {
+    if (score >= 150 && time_elapsed >= ui_gameTime-10) {
         pac_color = "green";
     }
     if (_foodCounter === 0) {
@@ -548,8 +566,15 @@ function UpdatePosition() {
     }
     else if(time_elapsed<=0)
     {
+        if(score<150)
+        {
+            window.alert("You can do better! you collect "+score + "points");
+        }
+        else{
+            window.alert("we have a winner! ("+score + "points)");
+        }
         window.clearInterval(intervalPacman);
-        window.alert("Game Over! Time is up!");
+
     }
     //collusion pacman and ghost
     else if (monsterEatPacman()) {
@@ -643,12 +668,12 @@ function continueGame() {
             monster.i = 0;
             monster.j = 0;
         }
-        if (i === 1) {
+        if (i === 1 && _numberOfMonster>1) {
             currBoard[38][18] = 6;
             monster.i = 38;
             monster.j = 18;
         }
-        if (i === 2) {
+        if (i === 2 && _numberOfMonster>2) {
             currBoard[38][0] = 7;
             monster.i = 38;
             monster.j = 0;
@@ -677,7 +702,7 @@ function continueGame() {
         }
     }
     Draw();
-    intervalPacman = setInterval(UpdatePosition, 125);
+    intervalPacman = setInterval(UpdatePosition, ui_gameSpeed);
 }
 
 
@@ -874,6 +899,14 @@ function isPoints(i, j) {
 }
 function isClock(i,j){
     return currBoard[i][j] ===400;
+}
+
+function stopPacmanGame(){
+    if (intervalPacman) {
+        document.getElementById("pacman_background").pause();
+        clearInterval(intervalPacman);
+        drawCanvasPic();
+    }
 }
 
 
