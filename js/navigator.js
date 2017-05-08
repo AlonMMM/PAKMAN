@@ -38,7 +38,6 @@ $(document).ready(function () {
         }
         else if (clickededItem.is('#lABOUT')) {
             $("#ABOUT").show();
-       //     openModal();
         }
     });
 
