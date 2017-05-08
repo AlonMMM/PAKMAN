@@ -113,7 +113,7 @@ li{
     display: block;
     padding: 35px 16px;
 }
-li a{
+#helloUserName,li a{
     text-decoration: none;
     color: white;
 }
@@ -144,4 +144,8 @@ li a:hover {
 }
 #the_game{
     width: 1500px;
+}
+
+#game_details{
+    display: none;
 }
