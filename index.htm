@@ -16,18 +16,22 @@
 
 
 <body>
-
+<p id= "our_names">Alon Mor 200828812 | Liron Seliktar 308552900</p>
+<container>
 <div id="menu">
+
     <div id="logo">
         <h1 >PA<a href="/img2.jpg"><img src='images/pacman.PNG' alt="HTML5 Icon" style="width:70px;height:70px;"></a>MAN
             - A & L </h1>
     </div>
+    <div>
     <li><a class="links" href='#' id="lWELCOME">WELCOME</a></li>
     <li><a class="links" href='#' id="lLOGIN">LOGIN</a></li>
     <li><a class="links" href='#' id="lREGISTER">REGISTER</a></li>
-    <li><a class="links" href='#' id="lABOUT">ABOUT</a></li>
+    <li><a class="links" href='#' id="lABOUT" onclick="openModal();">ABOUT</a></li>
 
-</div>
+    </div>
+
 </div>
 </br></br></br></br></br></br></br>
 
@@ -96,13 +100,19 @@
 
 </div>
 
-<div id="ABOUT" class="divs">
-    about
-    about
-    about
-    about
-    about
-    about
+<div id="ABOUT" type="button" class="divs" >
+    <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>DEVELOPERS: Alon Mor & Liron Seliktar</p>
+        <p>JQUERY - We used jquery for forms validations using jQuery Validation Plugin. and also for navigation.</p>
+        <p>TEMPLATE - We did not use any templates in the project. </p>
+        <p>DIFFICULTIES- </p>
+        <p>1. Taking care of collisions of different elements in the game. </p>
+        <p>2. Working for the first time with jQuery and it's syntax. </p>
+        <p>3. Dealing with bugs using the chrome debug who suffers from lack of information. </p>
+    </div>
+</div>
 </div>
 
 <div id="PLAY" class="divs">
@@ -163,9 +173,10 @@
         </form>
     </div>
 </div>
-<!--<footer id="footer">-->
-    <!--<h3> CONTACT US: alonmor89@gmail.com & lironseliktar@gmail.com </h3>-->
-<!--</footer>-->
+<div id="footer">
+    <h3> CONTACT US: alonmor89@gmail.com & lironseliktar@gmail.com </h3>
+</div>
+</container>
 </body>
 
 </html>
