@@ -118,3 +118,13 @@ function drawCanvasPic() {
     context.drawImage(img,0,0, canvas.width, canvas.height);
 }
 
+function loginFromWelcome()
+{
+    $("#WELCOME").hide();
+    $("#LOGIN").show();
+}
+
+function RegisterFromWelcome(){
+    $("#WELCOME").hide();
+    $("#REGISTER").show();
+}
