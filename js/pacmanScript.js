@@ -548,6 +548,7 @@ function UpdatePosition() {
     if (!_strawberryGotEaten && _monsterSpeedControl % ui_monsterSpeed === 0) {
         updatePointsPosition();
     }
+    
     //time
     var currentTime = new Date();
     if(isClock(pacmanShape.i,pacmanShape.j))
