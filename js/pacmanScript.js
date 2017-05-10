@@ -437,7 +437,7 @@ function drawLives() {
         context.beginPath();
         context.arc(center.x, center.y, 15, 0.15* Math.PI ,1.85 * Math.PI); // half circle
         context.lineTo(center.x, center.y);
-        context.fillStyle = pac_color; //color
+        context.fillStyle = "   yellow"; //color
         context.fill();
         context.beginPath();
         context.arc(center.x + 3.5, center.y - 10, 3, 0, 2 * Math.PI);
@@ -514,8 +514,10 @@ function UpdatePosition() {
         if (!_clockIsShow) {
             findClockRandomPosition();
         }
-        showClock();
-        _clockIsShow = true;
+        else {
+            showClock();
+            _clockIsShow = true;
+        }
     }
     else if (_randomUpdatesToShowClock + _clockTimeRemaind === _updatesCounter) {
         initialClock();
@@ -683,6 +685,7 @@ function continueGame() {
     _monsterLastPosition = [[], [], []];
 
     //initial pacman
+    pac_color = "yellow";
     m_currDirection = 4;
     var randomNum = Math.floor((Math.random() * 285 + 1));
     locatePacman = 0;
